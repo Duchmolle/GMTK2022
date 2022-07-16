@@ -14,14 +14,17 @@ public class Movement : MonoBehaviour
 
     [SerializeField] private Tilemap mainTilemap;
     [SerializeField] private Vector3Int beginningPos;
-    [SerializeField] private int movementValue;
+    [SerializeField] protected int movementValue;
     [SerializeField] private LayerMask whatIsObstacle;
+    [SerializeField] private Color sequenceFeedbackColor;
 
     private RaycastHit2D[] hitBuffer = new RaycastHit2D[1];
 
+    protected Vector3Int[] movingSequence = new Vector3Int[numberOfStep + 1];
+
     Animator animator;
 
-    private Vector3Int nextCellPos;
+    protected Vector3Int nextCellPos;
 
     public enum Direction
     {
@@ -39,24 +42,37 @@ public class Movement : MonoBehaviour
 
         nextCellPos = beginningPos;
 
+        ComputeSequence();
+        DrawSequence();
+
         StartCoroutine(DoSequence());
     }
 
-    private IEnumerator MoveToNextCell(Vector3Int dir)
+    private IEnumerator MoveToNextCell(int i)
     {
-        Vector3Int currentCellPos = nextCellPos;
-
-        nextCellPos = currentCellPos + dir;
-
         float nextMove = 0f;
         while (nextMove < moveTime)
         {
-            transform.position = Vector2.Lerp(mainTilemap.GetCellCenterWorld(currentCellPos), mainTilemap.GetCellCenterWorld(nextCellPos), nextMove / moveTime);
+            transform.position = Vector2.Lerp(mainTilemap.GetCellCenterWorld(movingSequence[i]), mainTilemap.GetCellCenterWorld(movingSequence[i + 1]), nextMove / moveTime);
             nextMove += Time.deltaTime;
             yield return null;
         }
 
-        transform.position = mainTilemap.GetCellCenterWorld(nextCellPos);
+        transform.position = mainTilemap.GetCellCenterWorld(movingSequence[i + 1]);
+    }
+
+    private void DrawSequence()
+    {
+        for(int i = 0; i < movingSequence.Length; i++)
+        {
+            mainTilemap.SetTileFlags(movingSequence[i], TileFlags.None);
+            mainTilemap.SetColor(movingSequence[i], sequenceFeedbackColor);
+        }
+    }
+
+    protected virtual void ComputeSequence()
+    {
+
     }
 
     protected virtual void Sequence()
@@ -72,14 +88,13 @@ public class Movement : MonoBehaviour
             {
                 movementValue = -movementValue;
             }
-            Sequence();
-            StartCoroutine(MoveToNextCell(GetDirection(movementValue)));
+            StartCoroutine(MoveToNextCell(i));
 
             yield return new WaitForSeconds(1);
         }
     }
 
-    private Vector3Int GetDirection(int movementValue)
+    protected Vector3Int GetDirection(int movementValue)
     {
         Vector3Int dir = new Vector3Int(0, 0, 0);
 
