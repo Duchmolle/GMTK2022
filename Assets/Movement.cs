@@ -16,11 +16,16 @@ public class Movement : MonoBehaviour
     [SerializeField] private Vector3Int beginningPos;
     [SerializeField] protected int movementValue;
     [SerializeField] private LayerMask whatIsObstacle;
+    [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private Color sequenceFeedbackColor;
 
     private RaycastHit2D[] hitBuffer = new RaycastHit2D[1];
+    private RaycastHit2D[] groundHitBuffer = new RaycastHit2D[1];
 
     protected Vector3Int[] movingSequence = new Vector3Int[numberOfStep + 1];
+
+    private Vector3Int endCellPos;
+    private Vector3Int startCellPos;
 
     Animator animator;
 
@@ -48,17 +53,33 @@ public class Movement : MonoBehaviour
         StartCoroutine(DoSequence());
     }
 
-    private IEnumerator MoveToNextCell(int i)
+    private IEnumerator MoveToNextCell(Vector3Int currentCell, Vector3Int nextCell)
     {
         float nextMove = 0f;
         while (nextMove < moveTime)
         {
-            transform.position = Vector2.Lerp(mainTilemap.GetCellCenterWorld(movingSequence[i]), mainTilemap.GetCellCenterWorld(movingSequence[i + 1]), nextMove / moveTime);
+            transform.position = Vector2.Lerp(mainTilemap.GetCellCenterWorld(currentCell), mainTilemap.GetCellCenterWorld(nextCell), nextMove / moveTime);
             nextMove += Time.deltaTime;
             yield return null;
         }
 
-        transform.position = mainTilemap.GetCellCenterWorld(movingSequence[i + 1]);
+        transform.position = mainTilemap.GetCellCenterWorld(nextCell);
+    }
+
+    private IEnumerator Fall() //Degueu
+    {
+        Vector2 currentPos = transform.position;
+
+        while(!IsGrounded())
+        {
+            Vector2 nextPos = currentPos + Vector2.down;
+            transform.position = Vector2.Lerp(currentPos, nextPos, 0.01f);
+            currentPos = nextPos;
+            yield return new WaitForSeconds(0.03f);
+        }
+
+        endCellPos = mainTilemap.WorldToCell(transform.position);
+        transform.position = mainTilemap.GetCellCenterWorld(endCellPos);
     }
 
     private void DrawSequence()
@@ -82,15 +103,24 @@ public class Movement : MonoBehaviour
 
     protected virtual IEnumerator DoSequence()
     {
+        startCellPos = movingSequence[0];
+
         for(int i = 0; i < numberOfStep; i++)
         {
             if (CheckNextTile())
             {
                 movementValue = -movementValue;
             }
-            StartCoroutine(MoveToNextCell(i));
+            StartCoroutine(MoveToNextCell(movingSequence[i], movingSequence[i+1]));
 
             yield return new WaitForSeconds(1);
+        }
+
+        endCellPos = movingSequence[numberOfStep];
+
+        if(!IsGrounded())
+        {
+            StartCoroutine(Fall());
         }
     }
 
@@ -126,11 +156,27 @@ public class Movement : MonoBehaviour
         return col > 0;
     }
 
+    private bool IsGrounded()
+    {
+        int groundCol = Physics2D.RaycastNonAlloc(transform.position, Vector2.down, groundHitBuffer, 1, whatIsGround);
+        return groundCol > 0;
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
 
         Gizmos.DrawRay(transform.position, new Vector2(GetDirection(movementValue).x, GetDirection(movementValue).y) * 1);
+
+        if(IsGrounded())
+        {
+            Gizmos.color = Color.green;
+        }
+        else
+        {
+            Gizmos.color = Color.blue;
+        }
+        Gizmos.DrawRay(transform.position, Vector2.down * 1);
     }
 
 
