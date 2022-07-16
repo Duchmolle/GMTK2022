@@ -10,6 +10,8 @@ public class GridManager : MonoBehaviour
     [SerializeField] private int columsCount;
     [SerializeField] private int rowsCount;
 
+    public GameObject[,] gameObjects2DArray;
+
     private void Awake()
     {
         DrawGrid();
