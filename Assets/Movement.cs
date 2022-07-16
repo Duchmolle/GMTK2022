@@ -9,7 +9,7 @@ public class Movement : MonoBehaviour
     private Vector2 startPos;
     private Vector2 endPos;
 
-    private static int numberOfStep = 4;
+    protected static int numberOfStep = 4;
     private static float moveTime = 0.4f;
 
     [SerializeField] private Tilemap mainTilemap;
@@ -18,6 +18,8 @@ public class Movement : MonoBehaviour
     [SerializeField] private LayerMask whatIsObstacle;
 
     private RaycastHit2D[] hitBuffer = new RaycastHit2D[1];
+
+    Animator animator;
 
     private Vector3Int nextCellPos;
 
@@ -29,7 +31,7 @@ public class Movement : MonoBehaviour
         BAS
     }
 
-    public Direction direction;
+    protected Direction direction;
 
     private void Start()
     {
@@ -40,7 +42,7 @@ public class Movement : MonoBehaviour
         StartCoroutine(DoSequence());
     }
 
-    protected IEnumerator MoveToNextCell(Vector3Int dir)
+    private IEnumerator MoveToNextCell(Vector3Int dir)
     {
         Vector3Int currentCellPos = nextCellPos;
 
@@ -57,15 +59,20 @@ public class Movement : MonoBehaviour
         transform.position = mainTilemap.GetCellCenterWorld(nextCellPos);
     }
 
-    IEnumerator DoSequence()
+    protected virtual void Sequence()
     {
-        for(int i = 0; i <= numberOfStep; i++)
+
+    }
+
+    protected virtual IEnumerator DoSequence()
+    {
+        for(int i = 0; i < numberOfStep; i++)
         {
             if (CheckNextTile())
             {
                 movementValue = -movementValue;
             }
-
+            Sequence();
             StartCoroutine(MoveToNextCell(GetDirection(movementValue)));
 
             yield return new WaitForSeconds(1);
