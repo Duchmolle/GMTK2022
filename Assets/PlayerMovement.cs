@@ -10,6 +10,7 @@ public class PlayerMovement : Movement
         {
             movingSequence[i] = nextCellPos;
             directionSequence[i] = GameManager.Instance.playerDirectionsSequence[i];
+            direction = directionSequence[i];
 
             if ((CheckNextRightTile(mainTilemap.GetCellCenterWorld(nextCellPos)) && directionSequence[i] == Direction.DROITE) ||
                 (CheckNextLeftTile(mainTilemap.GetCellCenterWorld(nextCellPos)) && directionSequence[i] == Direction.GAUCHE) ||
