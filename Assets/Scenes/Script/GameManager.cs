@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     public List <Transform> slots;
     public List<int> slotsValuesList;
 
+    public Movement.Direction[] playerDirectionsSequence = new Movement.Direction[4];
+
     public bool checkSlotList;
     public bool freeSlotSpace;
     private void Start()
@@ -50,7 +52,10 @@ public class GameManager : MonoBehaviour
                     //        freeSlotPos = slots[i];
                     //    }
                     //}
-                    DiceRandomizer dieScript = slots[i].GetChild(0).GetComponent<DiceRandomizer>();
+                    DiceRandomizer dieScript = slots[i].GetChild(1).GetComponent<DiceRandomizer>();
+                    Drop slotDrop = slots[i].GetComponent<Drop>();
+                    playerDirectionsSequence[i] = slotDrop.slotDirection;
+
                     int value = dieScript.diceValue;
                     slotsValuesList.Add(value);
 
@@ -58,6 +63,7 @@ public class GameManager : MonoBehaviour
             }
             checkSlotList = false;
             
+
         }
         
     }

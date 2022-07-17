@@ -8,6 +8,10 @@ public class Drop : MonoBehaviour, IDropHandler
     private RectTransform rectTransform;
     private Vector2 rectStartPos;
 
+    [SerializeField] GameObject dropDownMenu;
+
+    public Movement.Direction slotDirection;
+
     public bool isOccupied;
 
     private void Awake()
@@ -45,4 +49,12 @@ public class Drop : MonoBehaviour, IDropHandler
             rectTransform.anchoredPosition = rectStartPos;
         }
     }
+
+    public void OnChooseSelectionClicked(GameObject button)
+    {
+        dropDownMenu.transform.SetParent(button.transform.GetChild(0));
+        dropDownMenu.transform.localPosition = new Vector3(0, -30, 0);
+        dropDownMenu.SetActive(true);
+    }
+
 }
