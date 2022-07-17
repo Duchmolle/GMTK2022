@@ -24,7 +24,7 @@ public class Movement : MonoBehaviour
 
     protected Vector3Int[] movingSequence = new Vector3Int[numberOfStep + 1];
 
-    protected Direction[] directionSequence = new Direction[numberOfStep + 1];
+    protected Direction[] directionSequence = new Direction[numberOfStep];
 
     private Vector3Int endCellPos;
     private Vector3Int startCellPos;
