@@ -63,7 +63,7 @@ public class Drop : MonoBehaviour, IDropHandler
     public void OnChooseSelectionClicked(GameObject button)
     {
         dropDownMenu.transform.SetParent(button.transform.GetChild(0));
-        dropDownMenu.transform.localPosition = new Vector3(0, -30, 0);
+        dropDownMenu.transform.localPosition = new Vector3(0, -20, 0);
         dropDownMenu.SetActive(true);
     }
 
