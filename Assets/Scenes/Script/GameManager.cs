@@ -34,18 +34,16 @@ public class GameManager : MonoBehaviour
     {
         if (checkSlotList)
         {
-
-
             if(slotsValuesList.Count > 0)
             {
                 slotsValuesList.Clear();
             }
             for(int i = 0; i < slots.Count; i++)
             {
-                if(slots[i].childCount > 0)
+                if(slots[i].childCount > 2)
                 {
 
-                    DiceRandomizer dieScript = slots[i].GetChild(1).GetComponent<DiceRandomizer>();
+                    DiceRandomizer dieScript = slots[i].GetChild(2).GetComponent<DiceRandomizer>();
                     Drop slotDrop = slots[i].GetComponent<Drop>();
                     playerDirectionsSequence[i] = slotDrop.slotDirection;
 
@@ -53,9 +51,9 @@ public class GameManager : MonoBehaviour
                     slotsValuesList.Add(value);
 
                 }
-                if(slots[i].GetChild(1) != null)
+                if(slots[i].GetChild(2) != null)
                 {
-                    Transform dieTransform = slots[i].GetChild(1);
+                    Transform dieTransform = slots[i].GetChild(2);
                     DiceRandomizer dieScript = dieTransform.GetComponent<DiceRandomizer>();
                     dieScript.isRolled = false;
                     dieTransform.parent = dicesWindow;
@@ -94,7 +92,7 @@ public class GameManager : MonoBehaviour
         int diceCount = 0;
         for(int i = 0; i < slots.Count; i++)
         {
-            if(slots[i].childCount > 1)
+            if(slots[i].childCount > 2)
             {
                 diceCount += 1;
             }

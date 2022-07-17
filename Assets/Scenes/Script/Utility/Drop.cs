@@ -22,7 +22,7 @@ public class Drop : MonoBehaviour, IDropHandler
 
     private void Update()
     {
-        if(transform.childCount > 1)
+        if(transform.childCount > 2)
         {
             isOccupied = true;
         }
@@ -43,19 +43,18 @@ public class Drop : MonoBehaviour, IDropHandler
             // on assigne le dé comme étant enfant du slot;
             eventData.pointerDrag.gameObject.transform.parent = rectTransform;
             // on change la position de l'ancre du slot avant d'assigner la position de l'ancre du slot à l'ancre du dé
-            rectTransform.anchoredPosition = new Vector2(50f, -50f);
+            rectTransform.anchoredPosition = new Vector2(25f, -25f);
             eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = rectTransform.anchoredPosition;
 
             // on redonne à l'ancre du slot sa position initial
             rectTransform.anchoredPosition = rectStartPos;
         }
 
-        if(transform.childCount > 2)
+        if(transform.childCount > 3)
         {
-            RectTransform childRectTransform = transform.GetChild(1).GetComponent<RectTransform>();
-            transform.GetChild(1).parent = GameManager.Instance.CheckSlotSpace();
-            childRectTransform.anchoredPosition = new Vector2(50f, -50f);
-            
+            RectTransform childRectTransform = transform.GetChild(2).GetComponent<RectTransform>();
+            transform.GetChild(2).parent = GameManager.Instance.CheckSlotSpace();
+            childRectTransform.anchoredPosition = new Vector2(25f, -25f);            
         }
         
     }

@@ -45,7 +45,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
   sequence: {fileID: 0}
+  dicesWindow: {fileID: 0}
   slots: []
   slotsValuesList: 
-  playerDirectionsSequence: 00000000000000000000000000000000
+  playerDirectionsSequence: 0000000000000000000000000000000000000000
   checkSlotList: 0
