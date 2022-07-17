@@ -895,6 +895,30 @@ PrefabInstance:
       propertyPath: sequence
       value: 
       objectReference: {fileID: 1363115114}
+    - target: {fileID: 7320028877559872558, guid: b4acc78dff89a5e4383372905bcde20e, type: 3}
+      propertyPath: playerDirectionsSequence.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7320028877559872558, guid: b4acc78dff89a5e4383372905bcde20e, type: 3}
+      propertyPath: playerDirectionsSequence.Array.data[0]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7320028877559872558, guid: b4acc78dff89a5e4383372905bcde20e, type: 3}
+      propertyPath: playerDirectionsSequence.Array.data[1]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7320028877559872558, guid: b4acc78dff89a5e4383372905bcde20e, type: 3}
+      propertyPath: playerDirectionsSequence.Array.data[2]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7320028877559872558, guid: b4acc78dff89a5e4383372905bcde20e, type: 3}
+      propertyPath: playerDirectionsSequence.Array.data[3]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7320028877559872558, guid: b4acc78dff89a5e4383372905bcde20e, type: 3}
+      propertyPath: playerDirectionsSequence.Array.data[4]
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7320028877559872559, guid: b4acc78dff89a5e4383372905bcde20e, type: 3}
       propertyPath: m_RootOrder
       value: 2

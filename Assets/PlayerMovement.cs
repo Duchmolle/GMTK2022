@@ -6,7 +6,7 @@ public class PlayerMovement : Movement
 {
     protected override void ComputeSequence()
     {
-        for (int i = 0; i < numberOfStep; i++)
+        for (int i = 0; i <= numberOfStep; i++)
         {
             movingSequence[i] = nextCellPos;
             directionSequence[i] = GameManager.Instance.playerDirectionsSequence[i];
