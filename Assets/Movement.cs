@@ -109,7 +109,6 @@ public class Movement : MonoBehaviour
 
         for(int i = 0; i < numberOfStep; i++)
         {
-
             StartCoroutine(MoveToNextCell(movingSequence[i], movingSequence[i+1]));
 
             yield return new WaitForSeconds(1);
