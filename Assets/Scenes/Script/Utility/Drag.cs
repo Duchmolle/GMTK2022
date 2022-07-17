@@ -9,12 +9,14 @@ public class Drag : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IEnd
     private RectTransform rectTransform;
     private Canvas canvas; // Scale with screen size
     private CanvasGroup canvasGroup;
+    private Vector2 initalPos;
 
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
         canvasGroup = GetComponent<CanvasGroup>();
+        initalPos = rectTransform.anchoredPosition;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -35,6 +37,12 @@ public class Drag : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IEnd
     {
         //Debug.Log("OnEndDrag");
         canvasGroup.alpha = 1f;
+        
+        if(!transform.parent.CompareTag("slot"))
+        {
+            transform.SetParent(GameManager.Instance.dicesWindow); 
+            rectTransform.anchoredPosition = initalPos;
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData)

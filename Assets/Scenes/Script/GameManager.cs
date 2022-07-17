@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     public Canvas canvas;
     public Transform sequence;
+    public Transform dicesWindow;
     public List <Transform> slots;
     public List<int> slotsValuesList;
 
@@ -43,18 +44,7 @@ public class GameManager : MonoBehaviour
             {
                 if(slots[i].childCount > 0)
                 {
-                    //if(slots[i].childCount > 1)
-                    //{
-                    //    Transform child = slots[i].GetChild(1).transform;
-                    //    for(int j = 0; j < slots.Count; i++)
-                    //    {
-                    //        Drop slotScript = slots[j].GetComponent<Drop>();
-                    //        if (!slotScript.isOccupied)
-                    //        {
-                    //            child.transform.parent = slots[j];
-                    //        }
-                    //    }
-                    //}
+
                     DiceRandomizer dieScript = slots[i].GetChild(1).GetComponent<DiceRandomizer>();
                     Drop slotDrop = slots[i].GetComponent<Drop>();
                     playerDirectionsSequence[i] = slotDrop.slotDirection;
@@ -63,6 +53,15 @@ public class GameManager : MonoBehaviour
                     slotsValuesList.Add(value);
 
                 }
+                if(slots[i].GetChild(1) != null)
+                {
+                    Transform dieTransform = slots[i].GetChild(1);
+                    DiceRandomizer dieScript = dieTransform.GetComponent<DiceRandomizer>();
+                    dieScript.isRolled = false;
+                    dieTransform.parent = dicesWindow;
+
+                }
+
             }
             checkSlotList = false;
             
@@ -70,4 +69,45 @@ public class GameManager : MonoBehaviour
         }
         
     }
+
+    public Transform CheckSlotSpace()
+    {
+        Transform freeSlot = null;
+        for (int i = 0; i < slots.Count; i++)
+        {
+
+            Drop slotScript = slots[i].GetComponent<Drop>();
+            if (slotScript.isOccupied == false)
+            {
+                freeSlot = slots[i];
+
+                break;
+            }
+
+        }
+        return freeSlot;
+
+    }
+
+    public void LaunchSequence()
+    {
+        int diceCount = 0;
+        for(int i = 0; i < slots.Count; i++)
+        {
+            if(slots[i].childCount > 1)
+            {
+                diceCount += 1;
+            }
+        }
+
+        if (diceCount == slots.Count)
+        {
+            checkSlotList = true;
+        }
+        else
+        {
+            Debug.LogWarning("Dices must all be placed into the sequence windows !");
+        }
+    }
+
 }
