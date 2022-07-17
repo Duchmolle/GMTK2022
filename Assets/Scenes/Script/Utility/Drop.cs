@@ -14,6 +14,7 @@ public class Drop : MonoBehaviour, IDropHandler
 
     public bool isOccupied;
 
+
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -48,6 +49,9 @@ public class Drop : MonoBehaviour, IDropHandler
             // on redonne à l'ancre du slot sa position initial
             rectTransform.anchoredPosition = rectStartPos;
         }
+
+        //GameManager.Instance.CheckSlotSpace();
+        
     }
 
     public void OnChooseSelectionClicked(GameObject button)

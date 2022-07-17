@@ -72,13 +72,13 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < slots.Count; i++)
         {
-            if (slots[i].childCount > 1)
+            if (slots[i].childCount > 2)
             {
                 Drop slotScript = slots[i].GetComponent<Drop>();
                 if (slotScript.isOccupied == false)
                 {
                     Transform freeSlotPos = slots[i];
-                    Transform dieToMove = slots[i].GetChild(0);
+                    Transform dieToMove = slots[i].GetChild(1);
                     dieToMove.parent = freeSlotPos;
                 }
             }
