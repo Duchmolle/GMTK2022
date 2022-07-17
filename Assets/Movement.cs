@@ -161,7 +161,7 @@ public class Movement : MonoBehaviour
         return col > 0;
     }
 
-    private bool IsGrounded()
+    protected bool IsGrounded()
     {
         int groundCol = Physics2D.RaycastNonAlloc(transform.position, Vector2.down, groundHitBuffer, 1, whatIsGround);
         return groundCol > 0;

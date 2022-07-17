@@ -29,7 +29,8 @@ public class EnemyMovement : Movement
             iterator++;
 
             if ((CheckNextRightTile(mainTilemap.GetCellCenterWorld(nextCellPos)) && directionSequence[i] == Direction.DROITE) || 
-                (CheckNextLeftTile(mainTilemap.GetCellCenterWorld(nextCellPos)) && directionSequence[i] == Direction.GAUCHE))
+                (CheckNextLeftTile(mainTilemap.GetCellCenterWorld(nextCellPos)) && directionSequence[i] == Direction.GAUCHE) || 
+                (IsGrounded() && directionSequence[i] == Direction.BAS))
             {
                 continue;
             }
