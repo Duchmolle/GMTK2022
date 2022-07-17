@@ -12,7 +12,7 @@ public class Movement : MonoBehaviour
     protected static int numberOfStep = 4;
     private static float moveTime = 0.4f;
 
-    [SerializeField] private Tilemap mainTilemap;
+    [SerializeField] protected Tilemap mainTilemap;
     [SerializeField] private Vector3Int beginningPos;
     [SerializeField] protected int movementValue;
     [SerializeField] private LayerMask whatIsObstacle;
@@ -23,6 +23,8 @@ public class Movement : MonoBehaviour
     private RaycastHit2D[] groundHitBuffer = new RaycastHit2D[1];
 
     protected Vector3Int[] movingSequence = new Vector3Int[numberOfStep + 1];
+
+    protected Direction[] directionSequence = new Direction[numberOfStep + 1];
 
     private Vector3Int endCellPos;
     private Vector3Int startCellPos;
@@ -107,10 +109,7 @@ public class Movement : MonoBehaviour
 
         for(int i = 0; i < numberOfStep; i++)
         {
-            if (CheckNextTile())
-            {
-                movementValue = -movementValue;
-            }
+
             StartCoroutine(MoveToNextCell(movingSequence[i], movingSequence[i+1]));
 
             yield return new WaitForSeconds(1);
@@ -150,9 +149,15 @@ public class Movement : MonoBehaviour
         return dir;
     }
 
-    private bool CheckNextTile()
+    protected bool CheckNextRightTile(Vector3 cellTransformPosition)
     {
-        int col = Physics2D.RaycastNonAlloc(transform.position, new Vector2(GetDirection(movementValue).x, GetDirection(movementValue).y), hitBuffer, 1, whatIsObstacle);
+        int col = Physics2D.RaycastNonAlloc(cellTransformPosition, Vector2.right, hitBuffer, 1, whatIsObstacle);
+        return col > 0;
+    }
+
+    protected bool CheckNextLeftTile(Vector3 cellTransformPosition)
+    {
+        int col = Physics2D.RaycastNonAlloc(cellTransformPosition, Vector2.left, hitBuffer, 1, whatIsObstacle);
         return col > 0;
     }
 
@@ -164,10 +169,6 @@ public class Movement : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-
-        Gizmos.DrawRay(transform.position, new Vector2(GetDirection(movementValue).x, GetDirection(movementValue).y) * 1);
-
         if(IsGrounded())
         {
             Gizmos.color = Color.green;
