@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public List<int> slotsValuesList;
 
     public bool checkSlotList;
+    public bool freeSlotSpace;
     private void Start()
     {
         checkSlotList = false;
@@ -41,16 +42,12 @@ public class GameManager : MonoBehaviour
             {
                 if(slots[i].childCount > 0)
                 {
-                    //if(slots[i].childCount > 1)
+                    //if (slots[i].childCount > 1)
                     //{
-                    //    Transform child = slots[i].GetChild(1).transform;
-                    //    for(int j = 0; j < slots.Count; i++)
+                    //    Drop slotScript = slots[i].GetComponent<Drop>();
+                    //    if (slotScript.isOccupied == false)
                     //    {
-                    //        Drop slotScript = slots[j].GetComponent<Drop>();
-                    //        if (!slotScript.isOccupied)
-                    //        {
-                    //            child.transform.parent = slots[j];
-                    //        }
+                    //        freeSlotPos = slots[i];
                     //    }
                     //}
                     DiceRandomizer dieScript = slots[i].GetChild(0).GetComponent<DiceRandomizer>();
@@ -63,5 +60,37 @@ public class GameManager : MonoBehaviour
             
         }
         
+    }
+
+    public void CheckSlotSpace()
+    {
+        for (int i = 0; i < slots.Count; i++)
+        {
+            if (slots[i].childCount > 1)
+            {
+                Drop slotScript = slots[i].GetComponent<Drop>();
+                if (slotScript.isOccupied == false)
+                {
+                    Transform freeSlotPos = slots[i];
+                    Transform dieToMove = slots[i].GetChild(0);
+                    dieToMove.parent = freeSlotPos;
+                }
+            }
+        }
+
+      
+
+        //if (slots[i].childCount > 1)
+        //{
+        //    Transform child = slots[i].GetChild(1).transform;
+        //    for (int j = 0; j < slots.Count; i++)
+        //    {
+        //        Drop slotScript = slots[j].GetComponent<Drop>();
+        //        if (!slotScript.isOccupied)
+        //        {
+        //            child.transform.parent = slots[j];
+        //        }
+        //    }
+        //}
     }
 }
