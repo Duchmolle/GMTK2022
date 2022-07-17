@@ -22,7 +22,7 @@ public class Drop : MonoBehaviour, IDropHandler
 
     private void Update()
     {
-        if(transform.childCount > 0)
+        if(transform.childCount > 1)
         {
             isOccupied = true;
         }
@@ -50,7 +50,13 @@ public class Drop : MonoBehaviour, IDropHandler
             rectTransform.anchoredPosition = rectStartPos;
         }
 
-        //GameManager.Instance.CheckSlotSpace();
+        if(transform.childCount > 2)
+        {
+            RectTransform childRectTransform = transform.GetChild(1).GetComponent<RectTransform>();
+            transform.GetChild(1).parent = GameManager.Instance.CheckSlotSpace();
+            childRectTransform.anchoredPosition = new Vector2(50f, -50f);
+            
+        }
         
     }
 

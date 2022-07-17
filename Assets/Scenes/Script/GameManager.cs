@@ -17,17 +17,23 @@ public class GameManager : MonoBehaviour
     public Transform sequence;
     public List <Transform> slots;
     public List<int> slotsValuesList;
+    public List <Drop> freeSlots;
 
     public Movement.Direction[] playerDirectionsSequence = new Movement.Direction[4];
 
     public bool checkSlotList;
-    public bool freeSlotSpace;
+    //public bool freeSlotSpace;
     private void Start()
     {
         checkSlotList = false;
         foreach(Transform child in sequence)
         {
             slots.Add(child);
+        }
+        for (int i = 0; i < slots.Count; i++)
+        {
+            Drop slotScript = slots[i].GetComponent<Drop>();
+            freeSlots.Add(slotScript);
         }
     }
     private void Update()
@@ -68,35 +74,23 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void CheckSlotSpace()
+    public Transform CheckSlotSpace()
     {
+        Transform freeSlot = null;
         for (int i = 0; i < slots.Count; i++)
         {
-            if (slots[i].childCount > 2)
+
+            Drop slotScript = slots[i].GetComponent<Drop>();
+            if (slotScript.isOccupied == false)
             {
-                Drop slotScript = slots[i].GetComponent<Drop>();
-                if (slotScript.isOccupied == false)
-                {
-                    Transform freeSlotPos = slots[i];
-                    Transform dieToMove = slots[i].GetChild(1);
-                    dieToMove.parent = freeSlotPos;
-                }
+                freeSlot = slots[i];
+
+                break;
             }
+
         }
+        return freeSlot;
 
-      
-
-        //if (slots[i].childCount > 1)
-        //{
-        //    Transform child = slots[i].GetChild(1).transform;
-        //    for (int j = 0; j < slots.Count; i++)
-        //    {
-        //        Drop slotScript = slots[j].GetComponent<Drop>();
-        //        if (!slotScript.isOccupied)
-        //        {
-        //            child.transform.parent = slots[j];
-        //        }
-        //    }
-        //}
     }
+
 }
