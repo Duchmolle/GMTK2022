@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,6 +22,12 @@ public class GameManager : MonoBehaviour
 
     public Movement.Direction[] playerDirectionsSequence = new Movement.Direction[4];
 
+    [SerializeField] public Movement playerMovement;
+
+    List<Movement> allMovementEntity = new List<Movement>();
+
+    public int totalOfTicks;
+
     public bool checkSlotList;
     private void Start()
     {
@@ -29,6 +36,9 @@ public class GameManager : MonoBehaviour
         {
             slots.Add(child);
         }
+
+        allMovementEntity = FindObjectsOfType<Movement>().ToList();
+
     }
     private void Update()
     {
@@ -61,11 +71,21 @@ public class GameManager : MonoBehaviour
                 }
 
             }
-            checkSlotList = false;
-            
+            totalOfTicks = 0;
+            for (int h = 0; h < slotsValuesList.Count; h++)
+            {
+                totalOfTicks += slotsValuesList[h];
+            }
 
-        }
-        
+            GameManager.Instance.playerMovement.ComputeSequence();
+
+            foreach (Movement entry in allMovementEntity)
+            {
+                entry.ComputeSequence();
+                StartCoroutine(entry.DoSequence());
+            }
+            checkSlotList = false;
+        }        
     }
 
     public Transform CheckSlotSpace()
@@ -101,6 +121,7 @@ public class GameManager : MonoBehaviour
         if (diceCount == slots.Count)
         {
             checkSlotList = true;
+
         }
         else
         {

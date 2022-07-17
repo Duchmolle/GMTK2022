@@ -4,22 +4,32 @@ using UnityEngine;
 
 public class PlayerMovement : Movement
 {
-    protected override void ComputeSequence()
+    public override void ComputeSequence()
     {
-        for (int i = 0; i <= numberOfStep; i++)
+        movingSequence.Clear();
+        nextCellPos = endCellPos;
+        for (int i = 0; i < numberOfStep; i++)
         {
-            movingSequence[i] = nextCellPos;
-            directionSequence[i] = GameManager.Instance.playerDirectionsSequence[i];
-            direction = directionSequence[i];
-
-            if ((CheckNextRightTile(mainTilemap.GetCellCenterWorld(nextCellPos)) && directionSequence[i] == Direction.DROITE) ||
-                (CheckNextLeftTile(mainTilemap.GetCellCenterWorld(nextCellPos)) && directionSequence[i] == Direction.GAUCHE) ||
-                (IsGrounded() && directionSequence[i] == Direction.BAS))
+            for (int j = 0; j < GameManager.Instance.slotsValuesList[i]; j++)
             {
-                continue;
+                movingSequence.Add(nextCellPos);
+
+                directionSequence[i] = GameManager.Instance.playerDirectionsSequence[i];
+                direction = directionSequence[i];
+
+                if ((CheckNextRightTile(mainTilemap.GetCellCenterWorld(nextCellPos)) && directionSequence[i] == Direction.DROITE) ||
+                    (CheckNextLeftTile(mainTilemap.GetCellCenterWorld(nextCellPos)) && directionSequence[i] == Direction.GAUCHE) ||
+                    (IsGrounded() && directionSequence[i] == Direction.BAS))
+                {
+                    continue;
+                }
+
+                nextCellPos += GetDirection(movementValue);
             }
-            nextCellPos += GetDirection(movementValue);
+
         }
+
+        base.ComputeSequence();
     }
 
 }

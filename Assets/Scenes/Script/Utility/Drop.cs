@@ -56,7 +56,8 @@ public class Drop : MonoBehaviour, IDropHandler
             transform.GetChild(2).parent = GameManager.Instance.CheckSlotSpace();
             childRectTransform.anchoredPosition = new Vector2(25f, -25f);            
         }
-        
+
+
     }
 
     public void OnChooseSelectionClicked(GameObject button)

@@ -22,11 +22,11 @@ public class Movement : MonoBehaviour
     private RaycastHit2D[] hitBuffer = new RaycastHit2D[1];
     private RaycastHit2D[] groundHitBuffer = new RaycastHit2D[1];
 
-    protected Vector3Int[] movingSequence = new Vector3Int[numberOfStep + 1];
+    protected List<Vector3Int> movingSequence = new List<Vector3Int>();
 
     protected Direction[] directionSequence = new Direction[numberOfStep + 1];
 
-    private Vector3Int endCellPos;
+    protected Vector3Int endCellPos;
     private Vector3Int startCellPos;
 
     Animator animator;
@@ -49,10 +49,6 @@ public class Movement : MonoBehaviour
 
         nextCellPos = beginningPos;
 
-        ComputeSequence();
-        DrawSequence();
-
-        StartCoroutine(DoSequence());
     }
 
     private IEnumerator MoveToNextCell(Vector3Int currentCell, Vector3Int nextCell)
@@ -86,16 +82,16 @@ public class Movement : MonoBehaviour
 
     private void DrawSequence()
     {
-        for(int i = 0; i < movingSequence.Length; i++)
+        for(int i = 0; i < movingSequence.Count; i++)
         {
             mainTilemap.SetTileFlags(movingSequence[i], TileFlags.None);
             mainTilemap.SetColor(movingSequence[i], sequenceFeedbackColor);
         }
     }
 
-    protected virtual void ComputeSequence()
+    public virtual void ComputeSequence()
     {
-
+        DrawSequence();
     }
 
     protected virtual void Sequence()
@@ -103,20 +99,20 @@ public class Movement : MonoBehaviour
 
     }
 
-    protected virtual IEnumerator DoSequence()
+    public virtual IEnumerator DoSequence()
     {
         startCellPos = movingSequence[0];
 
-        for(int i = 0; i < numberOfStep; i++)
+        for(int i = 0; i < GameManager.Instance.totalOfTicks - 1; i++)
         {
-            StartCoroutine(MoveToNextCell(movingSequence[i], movingSequence[i+1]));
+            StartCoroutine(MoveToNextCell(movingSequence[i], movingSequence[i + 1]));
 
             yield return new WaitForSeconds(1);
         }
 
-        endCellPos = movingSequence[numberOfStep];
+        endCellPos = movingSequence[movingSequence.Count - 1];
 
-        if(!IsGrounded())
+        if (!IsGrounded())
         {
             StartCoroutine(Fall());
         }

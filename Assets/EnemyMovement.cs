@@ -7,22 +7,28 @@ public class EnemyMovement : Movement
     [SerializeField] private List<Direction> enemyRoute;
     private int iterator;
 
+    private void Start()
+    {
+        //ComputeSequence();
+    }
 
     protected override void Sequence()
     {
         //base.Sequence();
     }
 
-    protected override void ComputeSequence()
+    public override void ComputeSequence()
     {
-        for (int i = 0; i <= numberOfStep; i++)
+        directionSequence = new Direction[GameManager.Instance.totalOfTicks];
+
+        for (int i = 0; i < GameManager.Instance.totalOfTicks; i++)
         {
             if (iterator >= enemyRoute.Count)
             {
                 iterator = 0;
             }
 
-            movingSequence[i] = nextCellPos;
+            movingSequence.Add(nextCellPos);
             directionSequence[i] = enemyRoute[iterator];
 
             direction = enemyRoute[iterator];
@@ -36,6 +42,8 @@ public class EnemyMovement : Movement
             }
             nextCellPos += GetDirection(movementValue);
         }
+        
+        base.ComputeSequence();
     }
 
 
